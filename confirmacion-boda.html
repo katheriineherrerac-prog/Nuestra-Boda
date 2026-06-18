@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Josue & Katherine – Confirmación de asistencia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f0ece0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 520px;
+      background: #E2DFD2;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+    }
+
+    /* HEADER */
+    .header {
+      background: #2a2a2a;
+      text-align: center;
+      padding: 2.5rem 1.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .header svg.leaves {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+    .header .names {
+      font-family: 'Dancing Script', cursive;
+      font-size: 36px;
+      color: #fff;
+      margin-bottom: 8px;
+      position: relative; z-index: 2;
+    }
+    .header .ring {
+      font-size: 26px;
+      margin-bottom: 8px;
+      position: relative; z-index: 2;
+    }
+    .header h1 {
+      font-size: 20px;
+      font-weight: 400;
+      color: #fff;
+      margin-bottom: 4px;
+      position: relative; z-index: 2;
+    }
+    .header p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      position: relative; z-index: 2;
+    }
+
+    /* BODY */
+    .body {
+      padding: 2rem 1.5rem 2.5rem;
+      position: relative;
+    }
+    .body svg.leaf-corner {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.18;
+    }
+    .body svg.leaf-tl { top: 0; left: 0; width: 110px; height: 90px; }
+    .body svg.leaf-br { bottom: 0; right: 0; width: 110px; height: 90px; }
+
+    .field { margin-bottom: 1.4rem; position: relative; z-index: 1; }
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #7a7060;
+      margin-bottom: 7px;
+    }
+    .field input, .field textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #b8b3a4;
+      color: #2a2a2a;
+      font-size: 15px;
+      padding: 6px 0;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+    }
+    .field input:focus, .field textarea:focus { border-bottom-color: #5a5040; }
+    .field input::placeholder, .field textarea::placeholder { color: #b0aa9a; }
+    .field textarea { resize: vertical; min-height: 65px; }
+
+    .rsvp-group { display: flex; gap: 10px; }
+    .rsvp-btn {
+      flex: 1;
+      padding: 12px 8px;
+      border-radius: 10px;
+      border: 1px solid #b8b3a4;
+      background: #ede9dc;
+      color: #3a3428;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
+    .rsvp-btn:hover { background: #e0dbd0; }
+    .rsvp-btn.sel-si { background: #c8d8b8; border-color: #7a9a60; color: #2a4018; }
+    .rsvp-btn.sel-no { background: #ddc8c8; border-color: #9a6060; color: #401818; }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 13px;
+      background: #2a2a2a;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+      position: relative; z-index: 1;
+    }
+    .submit-btn:hover { background: #3d3d3d; }
+    .submit-btn:active { transform: scale(0.98); }
+    .submit-btn:disabled { background: #999; cursor: not-allowed; }
+
+    .error-msg {
+      font-size: 13px;
+      color: #922b21;
+      margin-top: 10px;
+      display: none;
+      text-align: center;
+    }
+
+    /* SUCCESS */
+    .success {
+      display: none;
+      padding: 2rem 1.5rem 2.5rem;
+      text-align: center;
+      position: relative;
+    }
+    .success svg.leaf-corner { position: absolute; pointer-events: none; opacity: 0.15; }
+    .success h2 { font-size: 20px; font-weight: 500; margin-bottom: 6px; color: #2a2a2a; }
+    .success .sub { font-size: 13px; color: #7a7060; margin-bottom: 1.5rem; }
+
+    .info-block {
+      background: #d8d4c4;
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      text-align: left;
+      border: 0.5px solid #c4bfb0;
+    }
+    .info-row {
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 10px; font-size: 13px; color: #3d3530;
+    }
+    .info-row:last-child { margin-bottom: 0; }
+    .info-row .icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .info-row strong { color: #2a2a2a; }
+
+    .palette-label { font-size: 12px; color: #7a7060; margin-bottom: 8px; }
+    .palette { display: flex; gap: 7px; justify-content: center; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .swatch { width: 28px; height: 28px; border-radius: 50%; border: 0.5px solid rgba(0,0,0,0.1); }
+
+    .note { font-size: 14px; color: #3d3530; margin-bottom: 1rem; line-height: 1.6; }
+    .note span { font-size: 13px; color: #7a7060; }
+
+    .gift-block {
+      background: #d8d4c4;
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: left;
+      border: 0.5px solid #c4bfb0;
+    }
+    .gift-block .gift-title { font-size: 12px; color: #7a7060; margin-bottom: 10px; }
+    .gift-row { font-size: 13px; color: #3d3530; margin-bottom: 7px; }
+    .gift-row:last-child { margin-bottom: 0; }
+    .gift-row strong { color: #2a2a2a; }
+
+    .decline-msg { font-size: 14px; color: #7a7060; line-height: 1.7; padding: 1rem 0; }
+
+    @media (max-width: 480px) {
+      .header .names { font-size: 28px; }
+      .rsvp-group { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <svg class="leaves" viewBox="0 0 540 150" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <g opacity="0.22">
+        <ellipse cx="18" cy="30" rx="12" ry="22" fill="#6aaa40" transform="rotate(-30 18 30)"/>
+        <ellipse cx="8" cy="58" rx="9" ry="18" fill="#4a8a28" transform="rotate(-10 8 58)"/>
+        <ellipse cx="32" cy="16" rx="8" ry="16" fill="#88c858" transform="rotate(-50 32 16)"/>
+        <ellipse cx="48" cy="40" rx="7" ry="14" fill="#5a9a34" transform="rotate(-20 48 40)"/>
+        <ellipse cx="2" cy="85" rx="10" ry="20" fill="#3a7a20" transform="rotate(10 2 85)"/>
+        <ellipse cx="24" cy="74" rx="8" ry="15" fill="#78b848" transform="rotate(-40 24 74)"/>
+      </g>
+      <g opacity="0.22">
+        <ellipse cx="522" cy="28" rx="12" ry="22" fill="#6aaa40" transform="rotate(30 522 28)"/>
+        <ellipse cx="535" cy="55" rx="9" ry="18" fill="#4a8a28" transform="rotate(10 535 55)"/>
+        <ellipse cx="508" cy="14" rx="8" ry="16" fill="#88c858" transform="rotate(50 508 14)"/>
+        <ellipse cx="494" cy="44" rx="7" ry="14" fill="#5a9a34" transform="rotate(20 494 44)"/>
+        <ellipse cx="538" cy="82" rx="10" ry="20" fill="#3a7a20" transform="rotate(-10 538 82)"/>
+        <ellipse cx="516" cy="70" rx="8" ry="15" fill="#78b848" transform="rotate(40 516 70)"/>
+      </g>
+    </svg>
+    <div class="names">Josue &amp; Katherine</div>
+    <div class="ring">💍</div>
+    <h1>Confirmación de asistencia</h1>
+    <p>Por favor, confirma tu asistencia antes del 19 de junio</p>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="body" id="form-body">
+    <svg class="leaf-corner leaf-tl" viewBox="0 0 110 90" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="15" cy="20" rx="10" ry="20" fill="#5a9a34" transform="rotate(-35 15 20)"/>
+      <ellipse cx="32" cy="10" rx="8" ry="16" fill="#7ab844" transform="rotate(-55 32 10)"/>
+      <ellipse cx="5" cy="45" rx="8" ry="16" fill="#4a8228" transform="rotate(-15 5 45)"/>
+      <ellipse cx="48" cy="22" rx="6" ry="13" fill="#88c050" transform="rotate(-70 48 22)"/>
+    </svg>
+    <svg class="leaf-corner leaf-br" viewBox="0 0 110 90" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="95" cy="70" rx="10" ry="20" fill="#5a9a34" transform="rotate(35 95 70)"/>
+      <ellipse cx="78" cy="80" rx="8" ry="16" fill="#7ab844" transform="rotate(55 78 80)"/>
+      <ellipse cx="105" cy="45" rx="8" ry="16" fill="#4a8228" transform="rotate(15 105 45)"/>
+      <ellipse cx="62" cy="68" rx="6" ry="13" fill="#88c050" transform="rotate(70 62 68)"/>
+    </svg>
+
+    <div class="field">
+      <label>Nombre completo</label>
+      <input type="text" id="nombre" placeholder="Tu nombre completo" />
+    </div>
+
+    <div class="field">
+      <label>¿Asistirás a la boda?</label>
+      <div class="rsvp-group">
+        <button class="rsvp-btn" id="btn-si" onclick="selectRSVP('si')">✓ Sí, asistiré</button>
+        <button class="rsvp-btn" id="btn-no" onclick="selectRSVP('no')">✕ No podré ir</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Mensaje para los novios (opcional)</label>
+      <textarea id="mensaje" placeholder="Escribe algo especial..."></textarea>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="enviar()">Enviar confirmación</button>
+    <p class="error-msg" id="error-msg">Hubo un error al enviar. Por favor intenta de nuevo.</p>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success" id="success-view">
+    <svg class="leaf-corner" style="bottom:0;right:0;width:110px;height:90px;" viewBox="0 0 110 90" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="95" cy="70" rx="10" ry="20" fill="#5a9a34" transform="rotate(35 95 70)"/>
+      <ellipse cx="78" cy="80" rx="8" ry="16" fill="#7ab844" transform="rotate(55 78 80)"/>
+      <ellipse cx="105" cy="45" rx="8" ry="16" fill="#4a8228" transform="rotate(15 105 45)"/>
+      <ellipse cx="62" cy="68" rx="6" ry="13" fill="#88c050" transform="rotate(70 62 68)"/>
+    </svg>
+    <div id="success-content"></div>
+  </div>
+
+</div>
+
+<script>
+  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyNUqopecMkY2o_dqNP-RiM-P3ixQB4BhXvUqGpZJZdsa-5wVHZbmI3Sh8z6nW-ezuU/exec';
+
+  let rsvp = null;
+
+  function selectRSVP(v) {
+    rsvp = v;
+    document.getElementById('btn-si').className = 'rsvp-btn' + (v === 'si' ? ' sel-si' : '');
+    document.getElementById('btn-no').className = 'rsvp-btn' + (v === 'no' ? ' sel-no' : '');
+  }
+
+  const paleta = ['#b8cce4','#4472c4','#7a9d4f','#4d6a2f','#8b7355','#c9a84c','#922b21','#7b241c','#641e16','#1b4f72','#2e4057','#1a1a1a'];
+
+  async function enviar() {
+    const nombre = document.getElementById('nombre').value.trim();
+    if (!nombre) { alert('Por favor ingresa tu nombre.'); return; }
+    if (!rsvp) { alert('Por favor indica si asistirás o no.'); return; }
+
+    const btn = document.getElementById('submit-btn');
+    const errMsg = document.getElementById('error-msg');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    errMsg.style.display = 'none';
+
+    const mensaje = document.getElementById('mensaje').value.trim();
+
+    try {
+      await fetch(SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: nombre,
+          asistencia: rsvp === 'si' ? 'Sí, asistiré' : 'No podré ir',
+          mensaje: mensaje || '(sin mensaje)'
+        })
+      });
+
+      const firstName = nombre.split(' ')[0];
+      document.getElementById('form-body').style.display = 'none';
+      const sv = document.getElementById('success-view');
+      sv.style.display = 'block';
+
+      if (rsvp === 'si') {
+        const swatches = paleta.map(c => `<div class="swatch" style="background:${c}"></div>`).join('');
+        document.getElementById('success-content').innerHTML = `
+          <h2>¡Gracias por confirmar, ${firstName}!</h2>
+          <p class="sub">Te dejamos la información para el día de la boda.</p>
+          <div class="info-block">
+            <div class="info-row"><span class="icon">📅</span><span><strong>Fecha:</strong> Viernes 26 de Junio</span></div>
+            <div class="info-row"><span class="icon">🕑</span><span><strong>Hora:</strong> 2:30 pm</span></div>
+            <div class="info-row"><span class="icon">📍</span><span><strong>Lugar:</strong> Av. del Río 257, Pueblo Libre</span></div>
+            <div class="info-row"><span class="icon">👔</span><span><strong>Dresscode:</strong> FORMAL</span></div>
+          </div>
+          <p class="palette-label">Paleta de color:</p>
+          <div class="palette">${swatches}</div>
+          <p class="note">¡Nos alegra mucho contar contigo en este día tan especial!<br><span>Si deseas tener un detalle con nosotros, puedes hacerlo de la siguiente manera:</span></p>
+          <div class="gift-block">
+            <p class="gift-title">Opciones para regalos</p>
+            <div class="gift-row"><strong>BCP:</strong> 19412557674017</div>
+            <div class="gift-row"><strong>CCI:</strong> 00219411255767401793</div>
+            <div class="gift-row"><strong>Lista de regalos:</strong> (ver QR)</div>
+            <div class="gift-row">📍 Av. del Río 257, Pueblo Libre</div>
+          </div>`;
+      } else {
+        document.getElementById('success-content').innerHTML = `
+          <h2>Gracias por avisarnos, ${firstName}</h2>
+          <p class="decline-msg">Lamentamos que no puedas acompañarnos, pero agradecemos que nos lo hayas comunicado. ¡Te deseamos lo mejor!</p>`;
+      }
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = 'Enviar confirmación';
+      errMsg.style.display = 'block';
+    }
+  }
+</script>
+</body>
+</html>
